@@ -2,24 +2,31 @@
 . .\variables.ps1
 
 #Retrive Servers
+function RetriveListServer {
+    param (
+        [Parameter(Mandatory=$true)]
+        [ValidateSet("APP", "WEB", "REP", "SQL")]
+        [string]
+        $ServerType,
 
-Invoke-Command -ComputerName "server-name" -ScriptBlock{
+        [Parameter(Mandatory=$true)]
+        [ValidateSet("DEV", "UAT", "PREPRO", "PROD")]
+        [string]
+        $environmentType
+    )
 
-    $computerName = Get-ADComputer -Filter * -Properties Name | Where-Object {$_.Name -like "#*" -and $_.Name -notlike "*####*"}
+    try {
 
-    #Create folder
-    if (Test-Path C:\Testing) {
-        Write-Host "Folder Testing already exists!" -ForegroundColor Green
+        #Get all computer 
+        $computer = Get-ADComputer -Filter {Name}
+
+
     }
-    else {
-        Write-Host "Folder doesn't exist - Creating a new folder...." -ForegroundColor Red
-        New-Item -ItemType Directory -Path 'C:\' -Name 'Testing'
-        Write-Host "### Folder Created ###" -ForegroundColor Green
+    catch {
+        $message = $_
+        Write-Host "ERROR: $message" -ForegroundColor Red
     }
-
-
-    $Premises | Out-File -FilePath 
-
+    
 }
 
 #Check if server is operational by test ping again it
