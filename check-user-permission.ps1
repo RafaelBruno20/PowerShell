@@ -18,13 +18,14 @@ function RetriveListServer {
     try {
 
         #Get all computer 
-        $computer = Get-ADComputer -Filter {Name}
-
+        $computerList = Get-ADComputer -Filter * | Where-Object {$_.Name -match $ServerType} | Where-Object {$_.Name -match $environmentType}
+        $computerList | Select-Object Name
 
     }
     catch {
         $message = $_
         Write-Host "ERROR: $message" -ForegroundColor Red
+        Write-Host "Not able to retrive the system request!" -ForegroundColor Red
     }
     
 }
